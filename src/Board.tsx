@@ -22,8 +22,8 @@ class Board extends Component <ComponentProps> {
                 this.props.dispatch(
                     {
                         type: "CLICK_CELL",
-                        row: ++row,
-                        call: ++call
+                        row: row,
+                        call: call
                     }
                 )
             }

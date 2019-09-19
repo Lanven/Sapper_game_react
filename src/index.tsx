@@ -26,16 +26,24 @@ const reducer = (state: any, action: any) => {
     }
 
     if (action.type === 'CLICK_CELL') {
-        debugger
-        if (state.bombsList.indexOf(Math.round((action.row - 1)*state.height + action.call)) !== -1) {
+        if (state.bombsList.indexOf(Math.round((action.row)*state.height + action.call + 1)) !== -1) {
             alert('BOOM!!!')
         } else {
-            let cellValue: number;
+            let cellValue: any = null;
 
+            for (let i: number = Math.max(action.row-1, 0); i <= Math.min(action.row + 1, state.height); i++) {
+                for (let j: number = Math.max(action.call-1, 0); j <= Math.min(action.call + 1, state.width); j++) {
+                    let ff = Math.round((i) * state.height + j + 1);
+                    if (state.bombsList.indexOf(ff) !== -1) {
+                        ++cellValue;
+                    }
+                }
+            }
+
+            state.list[action.row][action.call] = cellValue;
+
+            newState = {...state, list: state.list}
         }
-
-
-
     }
 
     if (action.type === 'GENERATE_NEW_BOARD') {

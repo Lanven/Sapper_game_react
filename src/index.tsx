@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import {createStore} from "redux";
-import {connect, Provider} from "react-redux";
+import {Provider} from "react-redux";
 
 import ReactDOM from 'react-dom';
 
@@ -9,6 +9,8 @@ import Board from "./Board";
 import './index.css';
 
 import * as serviceWorker from './serviceWorker';
+
+
 
 const reducer = (state: any, action: any) => {
     let newState = Object.assign({}, state);
@@ -26,31 +28,55 @@ const reducer = (state: any, action: any) => {
     }
 
     if (action.type === 'CLICK_CELL') {
+        state.list[action.row][action.call].isOpen = true;
         if (state.bombsList.indexOf(Math.round((action.row)*state.height + action.call + 1)) !== -1) {
-            alert('BOOM!!!')
+            alert('BOOM!!!');
+            state.list.map((o: any, i: number) => o.map((item: any) => item.isOpen = true))
         } else {
-            let cellValue: any = null;
-
-            for (let i: number = Math.max(action.row-1, 0); i <= Math.min(action.row + 1, state.height); i++) {
-                for (let j: number = Math.max(action.call-1, 0); j <= Math.min(action.call + 1, state.width); j++) {
-                    let ff = Math.round((i) * state.height + j + 1);
-                    if (state.bombsList.indexOf(ff) !== -1) {
-                        ++cellValue;
+            let openNearNullCell = function (row: number, call: number) {
+                for (let i: number = Math.max(row-1, 0); i <= Math.min(row + 1, (state.height-1)); i++) {
+                    for (let j: number = Math.max(call-1, 0); j <= Math.min(call + 1, (state.width-1)); j++) {
+                        if ((state.bombsList.indexOf(Math.round((i)*state.height + j + 1)) === -1) && state.list[i][j].isOpen === false) {
+                            state.list[i][j].isOpen = true;
+                            if (state.list[i][j].value) {
+                                continue
+                            }
+                            openNearNullCell(i, j);
+                        }
                     }
                 }
             }
 
-            state.list[action.row][action.call] = cellValue;
-
-            newState = {...state, list: state.list}
+            openNearNullCell(action.row, action.call)
         }
+
+        newState = {...state, list: state.list}
     }
 
     if (action.type === 'GENERATE_NEW_BOARD') {
-        const create = (amount: number) => new Array(amount).fill(null);
-        const matrix = (rows: number, cols: number) => create(cols).map((o, i) => create(rows))
 
-        const list = matrix(state.height, state.width);
+        interface CellObj {
+            value: number | null;
+            isOpen: boolean;
+        }
+
+        const list: CellObj[][] = [];
+        for(let i = 0; i < state.height; i++) {
+            list[i] = [];
+            for(let j = 0; j < state.width; j++) {
+                list[i][j] = {value: null, isOpen: false};
+            }
+        }
+
+/*        debugger
+
+        const create = (amount: number) => new Array(amount).fill({});
+        const matrix = (rows: number, cols: number) => create(cols).map((o, i) => {
+            debugger
+            return create(rows)
+                    })
+
+        const list = matrix(state.height, state.width);*/
 
         let bombsList: any = [];
 
@@ -65,6 +91,31 @@ const reducer = (state: any, action: any) => {
             }
             if (!found) { bombsList[bombsList.length]=randomNumber; }
         }
+
+        let getCellValue = function(row: number, call: number) {
+            let cellValue: any = null;
+            for (let i: number = Math.max(row-1, 0); i <= Math.min(row + 1, (state.height-1)); i++) {
+                for (let j: number = Math.max(call-1, 0); j <= Math.min(call + 1, (state.width-1)); j++) {
+                    let index = Math.round((i) * state.height + j + 1);
+                    if (bombsList.indexOf(index) !== -1) {
+                        ++cellValue;
+                    }
+                }
+            }
+            return cellValue
+        }
+
+        for (let listHeight = 0; listHeight < state.height; listHeight++) {
+            for (let listWidth = 0; listWidth< state.width; listWidth++) {
+                let listIndex = Math.round((listHeight) * state.height + listWidth + 1);
+                if (bombsList.indexOf(listIndex) === -1) {
+                    let ll = list[listHeight][listWidth].value;
+                    let kk = getCellValue(listHeight, listWidth)
+                    list[listHeight][listWidth].value = getCellValue(listHeight, listWidth)
+                }
+            }
+        }
+
         newState = {...state, list: list, bombsList: bombsList}
     }
 

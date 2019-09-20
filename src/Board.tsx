@@ -7,7 +7,9 @@ interface Props {
 }
 
 interface MappedStateToProps {
-    state: any
+    state: any,
+    row: number,
+    call: number
 }
 
 type ComponentProps = Partial<MappedStateToProps> & Props;
@@ -17,7 +19,7 @@ class Board extends Component <ComponentProps> {
         return <Cell
             row={row}
             call={call}
-            value={this.props.state.list[row][call]}
+            isBomb={this.props.state.bombsList.indexOf(Math.round((row)*this.props.state.height + call + 1))}
             onClick={(event: Event) =>
                 this.props.dispatch(
                     {

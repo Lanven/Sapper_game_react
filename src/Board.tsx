@@ -15,12 +15,22 @@ interface MappedStateToProps {
 type ComponentProps = Partial<MappedStateToProps> & Props;
 
 class Board extends Component <ComponentProps> {
+
     renderCell(row: any, call: any) {
-        return <Cell
-            row={row}
-            call={call}
-            isBomb={this.props.state.bombsList.indexOf(Math.round((row)*this.props.state.height + call + 1))}
-            onClick={(event: Event) =>
+
+        let changeCell = (button: number) => {
+            debugger
+            if (button == 2) {
+                this.props.dispatch(
+                    {
+                        type: "CLICK_CELL_FLAG",
+                        row: row,
+                        call: call
+                    }
+                )
+            }
+
+            if (button == 0 && !this.props.state.list[row][call].isFlag) {
                 this.props.dispatch(
                     {
                         type: "CLICK_CELL",
@@ -29,6 +39,37 @@ class Board extends Component <ComponentProps> {
                     }
                 )
             }
+        }
+
+        let clickCellEvent = (event: MouseEvent) => {
+            debugger
+            event.preventDefault();
+            event.stopPropagation()
+
+            let button = event.button;
+
+            if (!this.props.state.bombsList) {
+                Promise.resolve(this.props.dispatch(
+                    {
+                        type: "FILL_BOARD",
+                        row: row,
+                        call: call
+                    }
+                )).then(
+                    () => changeCell(button)
+                )
+            } else {
+                changeCell(button);
+            }
+
+        };
+
+        return <Cell
+            value={this.props.state.list[row][call].value}
+            isOpen={this.props.state.list[row][call].isOpen}
+            isFlag={this.props.state.list[row][call].isFlag}
+            isBomb={this.props.state.bombsList ? (this.props.state.bombsList.indexOf(Math.round((row)*this.props.state.height + call + 1)) == -1) : false}
+            onMouseDown={clickCellEvent}
         />
     }
 

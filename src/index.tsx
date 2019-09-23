@@ -53,36 +53,44 @@ const reducer = (state: any, action: any) => {
         newState = {...state, list: state.list}
     }
 
+    if (action.type === 'CLICK_CELL_FLAG') {
+        state.list[action.row][action.call].isFlag = true;
+        debugger
+        newState = {...state, list: state.list}
+    }
+
     if (action.type === 'GENERATE_NEW_BOARD') {
 
         interface CellObj {
             value: number | null;
             isOpen: boolean;
+            isFlag: boolean;
         }
 
         const list: CellObj[][] = [];
         for(let i = 0; i < state.height; i++) {
             list[i] = [];
             for(let j = 0; j < state.width; j++) {
-                list[i][j] = {value: null, isOpen: false};
+                list[i][j] = {value: null, isOpen: false, isFlag: false};
             }
         }
 
-/*        debugger
+        newState = {...state, list: list}
+    }
 
-        const create = (amount: number) => new Array(amount).fill({});
-        const matrix = (rows: number, cols: number) => create(cols).map((o, i) => {
-            debugger
-            return create(rows)
-                    })
-
-        const list = matrix(state.height, state.width);*/
-
+    if (action.type === "FILL_BOARD") {
+        debugger
+        let list = state.list;
         let bombsList: any = [];
+        let cellClick = Math.round((action.row)*state.height + action.call + 1)
 
         while (bombsList.length <= state.complexity) {
             let randomNumber = Math.ceil(Math.random() * state.height * state.width);
             let found = false;
+            if (randomNumber === cellClick) {
+                continue
+            }
+
             for (let i = 0; i < bombsList.length; i++) {
                 if (bombsList[i] === randomNumber){
                     found = true;
@@ -152,7 +160,6 @@ store.dispatch(
         type: "GENERATE_NEW_BOARD"
     }
 )
-
 
 ReactDOM.render(
     <Provider store={store}>

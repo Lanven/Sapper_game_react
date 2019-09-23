@@ -23,6 +23,11 @@ code {
   box-shadow: inset 0px 0px 5px #c5c5c5;
 }
 
+.cell.flag {
+  background: #efebeb url("bomb.jpg") no-repeat;
+  background-size: contain;
+}
+
 .cell.opened {
   background-color: #efebeb;
   webkit-box-shadow: none;

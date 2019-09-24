@@ -24,8 +24,8 @@ code {
 }
 
 .cell.flag {
-  background: #efebeb url("bomb.jpg") no-repeat;
-  background-size: contain;
+  background: #888585 url("flag.png") no-repeat;
+  background-size: cover;
 }
 
 .cell.opened {

@@ -18,9 +18,12 @@ class Board extends Component <ComponentProps> {
 
     renderCell(row: any, call: any) {
 
+        const isOpen: boolean = this.props.state.list[row][call].isOpen;
+        const isFlag: boolean = this.props.state.list[row][call].isFlag;
+        const isBomb = this.props.state.bombsList ? (this.props.state.bombsList.indexOf(Math.round((row)*this.props.state.height + call + 1)) !== -1) : false;
+
         let changeCell = (button: number) => {
-            debugger
-            if (button == 2) {
+            if (button === 2 && !isOpen) {
                 this.props.dispatch(
                     {
                         type: "CLICK_CELL_FLAG",
@@ -30,7 +33,7 @@ class Board extends Component <ComponentProps> {
                 )
             }
 
-            if (button == 0 && !this.props.state.list[row][call].isFlag) {
+            if (button === 0 && !isFlag && !isOpen) {
                 this.props.dispatch(
                     {
                         type: "CLICK_CELL",
@@ -42,10 +45,6 @@ class Board extends Component <ComponentProps> {
         }
 
         let clickCellEvent = (event: MouseEvent) => {
-            debugger
-            event.preventDefault();
-            event.stopPropagation()
-
             let button = event.button;
 
             if (!this.props.state.bombsList) {
@@ -66,9 +65,9 @@ class Board extends Component <ComponentProps> {
 
         return <Cell
             value={this.props.state.list[row][call].value}
-            isOpen={this.props.state.list[row][call].isOpen}
-            isFlag={this.props.state.list[row][call].isFlag}
-            isBomb={this.props.state.bombsList ? (this.props.state.bombsList.indexOf(Math.round((row)*this.props.state.height + call + 1)) == -1) : false}
+            isOpen={isOpen}
+            isFlag={isFlag}
+            isBomb={isBomb}
             onMouseDown={clickCellEvent}
         />
     }

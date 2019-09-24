@@ -12,11 +12,24 @@ code {
     monospace;
 }
 
+h2 {
+  text-align: center;
+}
+
+.board {
+  border-radius: 10px;
+  height: auto;
+  padding: 10px;
+  background-image: linear-gradient(#f4f4f7, #8e9bb9);
+  margin: auto;
+  width: fit-content;
+}
+
 .cell {
   height: 25px;
   width: 25px;
   vertical-align: middle;
-  background-color: #888585;
+  background: rgb(236, 234, 234) linear-gradient(rgb(210, 210, 210) 95%, rgb(146, 146, 146));
   outline: none;
   -webkit-box-shadow: inset 0px 0px 5px #c5c5c5;
   -moz-box-shadow: inset 0px 0px 5px #c5c5c5;
@@ -30,13 +43,23 @@ code {
 
 .cell.opened {
   background-color: #efebeb;
+  background-image: none;
   webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
 }
 
 .cell.opened.bomb {
-  background: #efebeb url("bomb.jpg") no-repeat;
+  background: #efebeb url("bomb.png") no-repeat;
+  background-size: contain;
+}
+
+.cell.opened.bomb.lastClick {
+  background-color: red;
+}
+
+.cell.opened.bomb.flag {
+  background: #efebeb url("bomb_flag.png") no-repeat;
   background-size: contain;
 }
 

@@ -4,7 +4,8 @@ interface MyState {
   onMouseDown: any,
   isBomb: boolean,
   isOpen: boolean,
-  isFlag: boolean
+  isFlag: boolean,
+  isLastClick: boolean,
   value: number | null
 }
 
@@ -19,6 +20,9 @@ class Cell extends Component <MyState> {
     }
     if (this.props.isFlag) {
       classNames.push('flag');
+    }
+    if (this.props.isLastClick) {
+      classNames.push('lastClick');
     }
 
     return <button className={classNames.join(' ')}

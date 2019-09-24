@@ -4,6 +4,7 @@ import {connect} from "react-redux";
 
 interface Props {
     dispatch: any,
+    onContextMenu: string
 }
 
 interface MappedStateToProps {
@@ -20,6 +21,7 @@ class Board extends Component <ComponentProps> {
 
         const isOpen: boolean = this.props.state.list[row][call].isOpen;
         const isFlag: boolean = this.props.state.list[row][call].isFlag;
+        const isLastClick: boolean = this.props.state.list[row][call].isLastClick;
         const isBomb = this.props.state.bombsList ? (this.props.state.bombsList.indexOf(Math.round((row)*this.props.state.height + call + 1)) !== -1) : false;
 
         let changeCell = (button: number) => {
@@ -68,6 +70,7 @@ class Board extends Component <ComponentProps> {
             isOpen={isOpen}
             isFlag={isFlag}
             isBomb={isBomb}
+            isLastClick={isLastClick}
             onMouseDown={clickCellEvent}
         />
     }

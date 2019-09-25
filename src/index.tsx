@@ -11,30 +11,17 @@ import * as serviceWorker from './serviceWorker';
 import {createStore} from "redux";
 import reducerCases from "./reducer";
 
-const store = createStore(reducerCases, {},
+const store = createStore(reducerCases, {statusGame: 0},
     (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__());
 
 store.dispatch(
     {
-        type: "SET_HEIGHT",
-        value: 6
+        type: "SET_GAME_PARAMS",
+        height: 9,
+        width: 9,
+        complexity: 10
     }
 )
-
-store.dispatch(
-    {
-        type: "SET_WIDTH",
-        value: 6
-    }
-)
-
-store.dispatch(
-    {
-        type: "SET_COMPLEXITY",
-        value: 6
-    }
-)
-
 store.dispatch(
     {
         type: "GENERATE_NEW_BOARD"

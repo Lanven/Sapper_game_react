@@ -2,14 +2,8 @@ const reducerCases = (state: any, action: any) => {
     let newState = Object.assign({}, state);
 
     switch (action.type) {
-        case 'SET_HEIGHT':
-            newState = {...state, height: action.value};
-            break;
-        case  'SET_WIDTH':
-            newState = {...state, width: action.value};
-            break;
-        case 'SET_COMPLEXITY':
-            newState = {...state, complexity: action.value};
+        case 'SET_GAME_PARAMS':
+            newState = {...state, height: action.height, width: action.width, complexity: action.complexity};
             break;
         case 'CLICK_CELL_FLAG': {
             state.list[action.row][action.call].isFlag = !state.list[action.row][action.call].isFlag;
@@ -21,12 +15,14 @@ const reducerCases = (state: any, action: any) => {
             state.list[action.row][action.call].isOpen = true;
             if (state.bombsList.indexOf(Math.round((action.row) * state.height + action.call + 1)) !== -1) {
                 alert('BOOM!!!');
+                state.statusGame = 1;
                 state.list[action.row][action.call].isLastClick = true;
                 state.list.map((o: any, i: number) => o.map((item: any) => item.isOpen = true))
             } else {
-                let openNearNullCell = function (row: number, call: number) {
+                const openNearNullCell = function (row: number, call: number) {
                     for (let i: number = Math.max(row - 1, 0); i <= Math.min(row + 1, (state.height - 1)); i++) {
                         for (let j: number = Math.max(call - 1, 0); j <= Math.min(call + 1, (state.width - 1)); j++) {
+                            let ll = state.bombsList.indexOf(Math.round((i) * state.height + j + 1))
                             if ((state.bombsList.indexOf(Math.round((i) * state.height + j + 1)) === -1) && state.list[i][j].isOpen === false && state.list[i][j].isFlag === false) {
                                 state.list[i][j].isOpen = true;
                                 if (state.list[i][j].value) {
@@ -40,7 +36,7 @@ const reducerCases = (state: any, action: any) => {
 
                 openNearNullCell(action.row, action.call);
 
-                let checkIsWinner = function(row: number, call: number) {
+                const checkIsWinner = function(row: number, call: number) {
                     let isWinner = true;
                     for (let i: number = 0; i < state.height; i++) {
                         for (let j: number = 0; j < state.width; j++) {
@@ -51,7 +47,7 @@ const reducerCases = (state: any, action: any) => {
                         }
                     }
                     if (isWinner) {
-                        alert("Вы выиграли!!!")
+                        state.statusGame = 2;
                         for (let i: number = 0; i < state.height; i++) {
                             for (let j: number = 0; j < state.width; j++) {
                                 if (state.list[i][j].isOpen === false) {
@@ -65,7 +61,7 @@ const reducerCases = (state: any, action: any) => {
                 checkIsWinner(action.row, action.call);
             }
 
-            newState = {...state, list: state.list};
+            newState = {...state, list: state.list, statusGame: state.statusGame};
             break;
         }
         case 'GENERATE_NEW_BOARD': {
@@ -84,7 +80,7 @@ const reducerCases = (state: any, action: any) => {
                 }
             }
 
-            newState = {...state, list: list};
+            newState = {...state, list: list, bombsList: null, statusGame: 0};
             break;
         }
         case 'FILL_BOARD': {
@@ -92,7 +88,7 @@ const reducerCases = (state: any, action: any) => {
             let bombsList: any = [];
             let cellClick = Math.round((action.row) * state.height + action.call + 1)
 
-            while (bombsList.length <= state.complexity) {
+            while (bombsList.length < state.complexity) {
                 let randomNumber = Math.ceil(Math.random() * state.height * state.width);
                 let found = false;
                 if (randomNumber === cellClick) {
@@ -110,7 +106,7 @@ const reducerCases = (state: any, action: any) => {
                 }
             }
 
-            let getCellValue = function (row: number, call: number) {
+            const getCellValue = function (row: number, call: number) {
                 let cellValue: any = null;
                 for (let i: number = Math.max(row - 1, 0); i <= Math.min(row + 1, (state.height - 1)); i++) {
                     for (let j: number = Math.max(call - 1, 0); j <= Math.min(call + 1, (state.width - 1)); j++) {

@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import {Button} from 'react-bootstrap'
 
 interface MyState {
   onMouseDown: any,
@@ -14,6 +15,7 @@ class Cell extends Component <MyState> {
     const classNames = ['cell'];
     if (this.props.isOpen) {
       classNames.push('opened');
+      classNames.push('color'+this.props.value);
     }
     if (this.props.isBomb) {
       classNames.push('bomb');
@@ -25,14 +27,15 @@ class Cell extends Component <MyState> {
       classNames.push('lastClick');
     }
 
-    return <button className={classNames.join(' ')}
-                   onMouseDown={this.props.onMouseDown}
+    return <Button variant="light" className={classNames.join(' ')}
+                   disabled={this.props.isOpen}
+                   onMouseDown={(e: any) => this.props.onMouseDown(e)}
     >
       {
         this.props.isOpen &&
         this.props.value
       }
-    </button>
+    </Button>
   }
 }
 

@@ -12,8 +12,15 @@ code {
     monospace;
 }
 
-h2 {
+.game {
   text-align: center;
+  margin: auto;
+  width: fit-content;
+}
+
+.menuButtons {
+  margin: 10px auto;
+  width: fit-content;
 }
 
 .board {
@@ -25,28 +32,61 @@ h2 {
   width: fit-content;
 }
 
-.cell {
+.row_header {
+  padding-bottom: 5px;
+}
+
+.container {
+  display: table;
+  border-collapse:collapse
+
+}
+.column {
+  display:table-row;
+  border: 1px solid #929191;
+}
+
+.cell, .cell:active, .cell:hover {
   height: 25px;
   width: 25px;
   vertical-align: middle;
-  background: rgb(236, 234, 234) linear-gradient(rgb(210, 210, 210) 95%, rgb(146, 146, 146));
   outline: none;
-  -webkit-box-shadow: inset 0px 0px 5px #c5c5c5;
-  -moz-box-shadow: inset 0px 0px 5px #c5c5c5;
-  box-shadow: inset 0px 0px 5px #c5c5c5;
+  display: table-cell;
+  box-shadow: inset 0px -2px 1px #929191, inset 2px 2px 1px #f5f5f5, inset -2px 0px 1px #929191 !important;
+  background: lightgray;
+  border-radius: 0;
+  border-bottom: 1px solid #929191;
+  border-right: 1px solid #929191;
+  border-left: 1px solid #f5f5f5;
+  border-top: 1px solid #f5f5f5;
 }
+
 
 .cell.flag {
   background: #888585 url("flag.png") no-repeat;
   background-size: cover;
 }
 
-.cell.opened {
-  background-color: #efebeb;
-  background-image: none;
-  webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
+.cell.opened, .cell.opened:hover {
+  background: #efebeb;
+  box-shadow: 0 0 0 1px #ddd inset, 0 0px 0px #fff !important;
+  border: 1px solid #929191;
+}
+
+.cell.opened.color1 {
+  color: blue;
+}
+
+.cell.opened.color2 {
+  color: green;
+}
+
+.cell.opened.color3 {
+  color: red;
+}
+
+.cell.opened.color4 {
+  color: darkblue;
 }
 
 .cell.opened.bomb {

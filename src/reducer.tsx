@@ -33,12 +33,13 @@ const reducerCases = (state: State = initialState, action: any): State => {
 
     switch (action.type) {
         case 'SET_GAME_PARAMS': {
-            return {
+            return { // todo: 2
                 ...state,
-                height: action.height,
-                width: action.width,
-                complexity: action.complexity,
-                flagsAvailableCount: action.complexity,
+                // height: action.height,
+                // width: action.width,
+                // complexity: action.complexity,
+                // flagsAvailableCount: action.complexity,
+                ...action,
                 statusGame: 0
             };
         }
@@ -59,6 +60,7 @@ const reducerCases = (state: State = initialState, action: any): State => {
             };
         }
         case 'CLICK_CELL': {
+
             let statusGame: number = state.statusGame;
             let list:CellObj[][] = [...state.list];
             let flagsAvailableCount: number = state.flagsAvailableCount;
@@ -67,6 +69,7 @@ const reducerCases = (state: State = initialState, action: any): State => {
             if (state.bombsList && state.bombsList.indexOf(Math.round((action.row) * state.height + action.call + 1)) !== -1) {
                 alert('BOOM!!!');
                 statusGame = 1;
+                flagsAvailableCount = 0;
                 list = state.list.map((o: any, i: number) => o.map((item: any) => ({...item, isOpen: true})));
                 list[action.row][action.call].isLastClick = true;
             } else {
@@ -81,9 +84,9 @@ const reducerCases = (state: State = initialState, action: any): State => {
 
             return {
                 ...state,
-                statusGame: statusGame,
-                flagsAvailableCount: flagsAvailableCount,
-                list: list
+                statusGame,
+                flagsAvailableCount,
+                list
             };
         }
         case 'GENERATE_NEW_BOARD': {

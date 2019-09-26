@@ -92,13 +92,13 @@ class Board extends Component <ComponentProps> {
 
 function matchDispatchToProps(dispatch: any) {
     const actionCreatorsObj = {
-        fillBoard: fillBoard,
-        clickCellFlag: clickCellFlag,
-        updateFlagsAvailableCount: updateFlagsAvailableCount,
-        clickCell: clickCell
+        fillBoard,
+        clickCellFlag,
+        updateFlagsAvailableCount,
+        clickCell
     };
     return bindActionCreators(actionCreatorsObj, dispatch)
 }
 
-const mapStateToProps = (state: any) => ({state: state});
+const mapStateToProps = (state: any) => ({state});
 export default connect(mapStateToProps, matchDispatchToProps)(Board);

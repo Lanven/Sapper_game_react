@@ -2,7 +2,7 @@ const checkIsWinner = function(list: any, height: number, width: number, bombsLi
     let isWinner = true;
     for (let i: number = 0; i < height; i++) {
         for (let j: number = 0; j < width; j++) {
-            if ((bombsList && bombsList.indexOf(Math.round((i) * height + j + 1)) === -1) && list[i][j].isOpen === false) {
+            if ((bombsList && bombsList.indexOf(Math.round((i) * height + j + 1)) === -1) && !list[i][j].isOpen) {
                 isWinner = false;
                 break;
             }
@@ -11,7 +11,7 @@ const checkIsWinner = function(list: any, height: number, width: number, bombsLi
     if (isWinner) {
         for (let i: number = 0; i < height; i++) {
             for (let j: number = 0; j < width; j++) {
-                if (list[i][j].isOpen === false) {
+                if (!list[i][j].isOpen) {
                     list[i][j].isFlag = true;
                 }
             }

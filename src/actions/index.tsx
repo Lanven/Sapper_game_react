@@ -32,12 +32,12 @@ export const clickCell = (row: number, call: number) => {
 };
 
 export const setGameParams = (height: number, width: number, complexity: number) => {
-    return {
+    return ({
         type: ACTIONS.SET_GAME_PARAMS,
-        height: height,
-        width: width,
-        complexity: complexity
-    }
+        height,
+        width, // todo: 1
+        complexity
+    })
 };
 
 export const generateNewBoard = () => {

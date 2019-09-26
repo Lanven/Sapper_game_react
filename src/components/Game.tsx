@@ -100,11 +100,11 @@ class Game extends Component <ComponentProps> {
 
 function matchDispatchToProps(dispatch: any) {
     const actionCreatorsObj = {
-        setGameParams: setGameParams,
-        generateNewBoard: generateNewBoard
+        setGameParams,
+        generateNewBoard
     };
     return bindActionCreators(actionCreatorsObj, dispatch)
 }
 
-const mapStateToProps = (state: any) => ({state: state});
+const mapStateToProps = (state: any) => ({state});
 export default connect(mapStateToProps, matchDispatchToProps)(Game)

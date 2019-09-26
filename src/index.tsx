@@ -4,7 +4,7 @@ import {Provider} from "react-redux";
 
 import ReactDOM from 'react-dom';
 
-import Game from "./Game";
+import Game from "./components/Game";
 import './index.css';
 
 import * as serviceWorker from './serviceWorker';

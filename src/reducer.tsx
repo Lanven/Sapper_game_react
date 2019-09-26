@@ -29,40 +29,64 @@ const initialState: State = {
     bombsList: []
 }
 
-const reducerCases = (state: State = initialState, action: any) => {
+const reducerCases = (state: State = initialState, action: any): State => {
     let newState = Object.assign({}, state);
 
     switch (action.type) {
-        case 'SET_GAME_PARAMS':
-            newState = {...state, height: action.height, width: action.width, complexity: action.complexity, flagsAvailableCount: action.complexity, statusGame: 0};
-            break;
-        case 'UPDATE_FLAGS_AVAILABLE_COUNT':
-            newState = {...state, flagsAvailableCount: action.value};
-            break;
-        case 'CLICK_CELL_FLAG': {
-            state.list[action.row][action.call].isFlag = !state.list[action.row][action.call].isFlag;
+        case 'SET_GAME_PARAMS': {
+            return {
+                ...state,
+                height: action.height,
+                width: action.width,
+                complexity: action.complexity,
+                flagsAvailableCount: action.complexity,
+                statusGame: 0
+            };
+        }
 
-            newState = {...state, list: state.list};
-            break;
+        case 'UPDATE_FLAGS_AVAILABLE_COUNT': {
+            return {
+                ...state,
+                flagsAvailableCount: action.value
+            };
+        }
+        case 'CLICK_CELL_FLAG': {
+            let list:CellObj[][] = {...state.list};
+            list[action.row][action.call].isFlag = !list[action.row][action.call].isFlag;
+
+            return {
+                ...state,
+                list
+            };
         }
         case 'CLICK_CELL': {
-            state.list[action.row][action.call].isOpen = true;
+            debugger
+            let statusGame: number = state.statusGame;
+            let list:CellObj[][] = {...state.list};
+            let flagsAvailableCount: number = state.flagsAvailableCount;
+
+            list[action.row][action.call].isOpen = true;
             if (state.bombsList && state.bombsList.indexOf(Math.round((action.row) * state.height + action.call + 1)) !== -1) {
                 alert('BOOM!!!');
-                state.statusGame = 1;
-                state.list[action.row][action.call].isLastClick = true;
-                state.list.map((o: any, i: number) => o.map((item: any) => item.isOpen = true))
+                statusGame = 1;
+                list = state.list.map((o: any, i: number) => o.map((item: any) => ({...item, isOpen: true})));
+                list[action.row][action.call].isLastClick = true;
             } else {
-                openNearNullCell(state, action.row, action.call);
+                openNearNullCell(list, state.height, state.width, state.bombsList, action.row, action.call);
 
-                checkIsWinner(state, action.row, action.call);
-                if (state.statusGame === 2) {
-                    state.flagsAvailableCount = 0;
+                const isWinner = checkIsWinner(list, state.height, state.width, state.bombsList, action.row, action.call);
+                if (isWinner) {
+                    statusGame = 2;
+                    flagsAvailableCount = 0;
                 }
             }
 
-            newState = {...state, list: state.list, statusGame: state.statusGame, flagsAvailableCount: state.flagsAvailableCount};
-            break;
+            return {
+                ...state,
+                statusGame: statusGame,
+                flagsAvailableCount: flagsAvailableCount,
+                list: list
+            };
         }
         case 'GENERATE_NEW_BOARD': {
             const list: CellObj[][] = [];
@@ -73,12 +97,17 @@ const reducerCases = (state: State = initialState, action: any) => {
                 }
             }
 
-            newState = {...state, list: list, bombsList: null, statusGame: 0, flagsAvailableCount: state.complexity};
-            break;
+            return {
+                ...state,
+                list: list,
+                bombsList: null,
+                statusGame: 0,
+                flagsAvailableCount: state.complexity
+            };
         }
         case 'FILL_BOARD': {
-            let list = state.list;
-            let bombsList: any = [];
+            let list = {...state.list};
+            let bombsList: number[] | null = [];
             let cellClick = Math.round((action.row) * state.height + action.call + 1);
 
             while (bombsList.length < state.complexity) {
@@ -108,12 +137,17 @@ const reducerCases = (state: State = initialState, action: any) => {
                 }
             }
 
-            newState = {...state, list: list, bombsList: bombsList};
-            break;
+            return {
+                ...state,
+                list: list,
+                bombsList: bombsList
+            }
         }
+        default:
+            return state;
     }
 
-    return newState;
+
 }
 
 export default reducerCases;

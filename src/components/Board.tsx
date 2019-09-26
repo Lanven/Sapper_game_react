@@ -60,7 +60,13 @@ class Board extends Component <ComponentProps> {
     }
 
     render() {
-        const list: number[][] = this.props.state.list;
+        interface CellObj {
+            value: number | null;
+            isOpen: boolean;
+            isFlag: boolean;
+            isLastClick: boolean
+        }
+        const list: CellObj[][] = this.props.state.list;
 
         return (
             <div className="container">

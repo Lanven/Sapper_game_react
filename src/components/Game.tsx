@@ -1,16 +1,18 @@
 import React, {Component} from 'react';
 import Board from "./Board";
 import {connect} from "react-redux";
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Container, Row, Col, Nav} from 'react-bootstrap'
+import {bindActionCreators} from "redux";
+import {setGameParams, generateNewBoard} from "../action_creators";
 
 interface Props {
-    dispatch: any,
+    setGameParams: any,
+    generateNewBoard: any
 }
 
 interface MappedStateToProps {
-    state: any
+    state: any,
 }
 
 type ComponentProps = Partial<MappedStateToProps> & Props;
@@ -19,24 +21,13 @@ type ComponentProps = Partial<MappedStateToProps> & Props;
 class Game extends Component <ComponentProps> {
 
     setGamesParams (height: number, width: number, complexity: number) {
-        this.props.dispatch(
-            {
-                type: "SET_GAME_PARAMS",
-                height: height,
-                width: width,
-                complexity: complexity
-            }
-        );
-
-        this.props.dispatch(
-            {
-                type: "GENERATE_NEW_BOARD"
-            }
-        )
-
+        this.props.setGameParams(height, width, complexity);
+        this.props.generateNewBoard();
     }
 
-
+    componentWillMount() {
+        this.setGamesParams(9, 9, 10);
+    }
 
     render() {
         return(
@@ -74,11 +65,7 @@ class Game extends Component <ComponentProps> {
                         <Col xs={4}>
                             <button
                                 onClick={ () =>
-                                    this.props.dispatch(
-                                        {
-                                            type: "GENERATE_NEW_BOARD"
-                                        }
-                                    )
+                                    this.props.generateNewBoard()
                                 }
                                 className="glyphicon glyphicon-refresh">
                             </button>
@@ -111,5 +98,13 @@ class Game extends Component <ComponentProps> {
     }
 }
 
+function matchDispatchToProps(dispatch: any) {
+    const actionCreatorsObj = {
+        setGameParams: setGameParams,
+        generateNewBoard: generateNewBoard
+    };
+    return bindActionCreators(actionCreatorsObj, dispatch)
+}
+
 const mapStateToProps = (state: any) => ({state: state});
-export default connect(mapStateToProps)(Game)
+export default connect(mapStateToProps, matchDispatchToProps)(Game)

@@ -1,10 +1,15 @@
 import React, {Component} from "react";
 import Cell from "./Cell";
 import {connect} from "react-redux";
+import {bindActionCreators} from 'redux'
+import {fillBoard, clickCellFlag, updateFlagsAvailableCount, clickCell} from "../action_creators";
 
 interface Props {
-    dispatch: any,
-    onContextMenu: string
+    onContextMenu: string,
+    fillBoard: any,
+    clickCellFlag: any,
+    updateFlagsAvailableCount: any,
+    clickCell: any
 }
 
 interface MappedStateToProps {
@@ -21,43 +26,20 @@ class Board extends Component <ComponentProps> {
         let button = event.button;
 
         if (!this.props.state.bombsList) {
-            this.props.dispatch(
-                {
-                    type: "FILL_BOARD",
-                    row: row,
-                    call: call
-                }
-            )
+            this.props.fillBoard(row, call);
         }
 
         if (button === 2 && !isOpen) {
             if (!isFlag && this.props.state.flagsAvailableCount === 0) return;
 
-            this.props.dispatch(
-                {
-                    type: "CLICK_CELL_FLAG",
-                    row: row,
-                    call: call
-                }
-            );
+            this.props.clickCellFlag(row, call);
 
             let flagsAvailableCount = this.props.state.flagsAvailableCount + (isFlag ? 1: -1);
-            this.props.dispatch(
-                {
-                    type: "UPDATE_FLAGS_AVAILABLE_COUNT",
-                    value: flagsAvailableCount
-                }
-            )
+            this.props.updateFlagsAvailableCount(flagsAvailableCount);
         }
 
         if (button === 0 && !isFlag && !isOpen) {
-            this.props.dispatch(
-                {
-                    type: "CLICK_CELL",
-                    row: row,
-                    call: call
-                }
-            )
+            this.props.clickCell(row, call);
         }
     };
 
@@ -98,5 +80,15 @@ class Board extends Component <ComponentProps> {
     }
 }
 
+function matchDispatchToProps(dispatch: any) {
+    const actionCreatorsObj = {
+        fillBoard: fillBoard,
+        clickCellFlag: clickCellFlag,
+        updateFlagsAvailableCount: updateFlagsAvailableCount,
+        clickCell: clickCell
+    };
+    return bindActionCreators(actionCreatorsObj, dispatch)
+}
+
 const mapStateToProps = (state: any) => ({state: state});
-export default connect(mapStateToProps)(Board);
+export default connect(mapStateToProps, matchDispatchToProps)(Board);

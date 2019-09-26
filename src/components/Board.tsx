@@ -31,11 +31,21 @@ class Board extends Component <ComponentProps> {
         }
 
         if (button === 2 && !isOpen) {
+            if (!isFlag && this.props.state.flagsAvailableCount === 0) return;
+
             this.props.dispatch(
                 {
                     type: "CLICK_CELL_FLAG",
                     row: row,
                     call: call
+                }
+            );
+
+            let flagsAvailableCount = this.props.state.flagsAvailableCount + (isFlag ? 1: -1);
+            this.props.dispatch(
+                {
+                    type: "UPDATE_FLAGS_AVAILABLE_COUNT",
+                    value: flagsAvailableCount
                 }
             )
         }

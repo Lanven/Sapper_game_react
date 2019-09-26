@@ -64,7 +64,13 @@ class Game extends Component <ComponentProps> {
 
                 <div className='board'>
                     <Row className="row_header">
-                        <Col xs={4}></Col>
+                        <Col xs={4} style={{textAlign: 'left'}}>
+                            <div className="imageFlag">
+                            </div>
+                            <label className="labelFlag">
+                                {this.props.state.flagsAvailableCount}
+                            </label>
+                        </Col>
                         <Col xs={4}>
                             <button
                                 onClick={ () =>

@@ -7,7 +7,10 @@ const reducerCases = (state: any, action: any) => {
 
     switch (action.type) {
         case 'SET_GAME_PARAMS':
-            newState = {...state, height: action.height, width: action.width, complexity: action.complexity};
+            newState = {...state, height: action.height, width: action.width, complexity: action.complexity, flagsAvailableCount: action.complexity, statusGame: 0};
+            break;
+        case 'UPDATE_FLAGS_AVAILABLE_COUNT':
+            newState = {...state, flagsAvailableCount: action.value};
             break;
         case 'CLICK_CELL_FLAG': {
             state.list[action.row][action.call].isFlag = !state.list[action.row][action.call].isFlag;
@@ -47,13 +50,13 @@ const reducerCases = (state: any, action: any) => {
                 }
             }
 
-            newState = {...state, list: list, bombsList: null, statusGame: 0};
+            newState = {...state, list: list, bombsList: null, statusGame: 0, flagsAvailableCount: state.complexity};
             break;
         }
         case 'FILL_BOARD': {
             let list = state.list;
             let bombsList: any = [];
-            let cellClick = Math.round((action.row) * state.height + action.call + 1)
+            let cellClick = Math.round((action.row) * state.height + action.call + 1);
 
             while (bombsList.length < state.complexity) {
                 let randomNumber = Math.ceil(Math.random() * state.height * state.width);

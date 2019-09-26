@@ -11,7 +11,7 @@ import * as serviceWorker from './serviceWorker';
 import {createStore} from "redux";
 import reducerCases from "./reducer";
 
-const store = createStore(reducerCases, {statusGame: 0},
+const store = createStore(reducerCases, {},
     (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__());
 
 store.dispatch(

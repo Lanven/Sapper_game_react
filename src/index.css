@@ -36,6 +36,21 @@ code {
   padding-bottom: 5px;
 }
 
+.imageFlag {
+  background: white url("flag.png") no-repeat center;
+  background-size: contain;
+  border-radius: 30px;
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  margin-right: 4px;
+}
+
+.labelFlag {
+  vertical-align: bottom;
+  font-size: 12px;
+}
+
 .container {
   display: table;
   border-collapse:collapse
@@ -63,8 +78,8 @@ code {
 
 
 .cell.flag {
-  background: #888585 url("flag.png") no-repeat;
-  background-size: cover;
+  background: white url("flag.png") no-repeat center;
+  background-size: contain;
 }
 
 .cell.opened, .cell.opened:hover {

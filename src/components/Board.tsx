@@ -54,6 +54,7 @@ class Board extends Component <ComponentProps> {
             isOpen={isOpen}
             isFlag={isFlag}
             isBomb={isBomb}
+            key={call}
             isLastClick={isLastClick}
             onMouseDown={(e: any) => this.clickCellEvent(e, row, call, isOpen, isFlag)}
         />
@@ -66,20 +67,23 @@ class Board extends Component <ComponentProps> {
             isFlag: boolean;
             isLastClick: boolean
         }
-        const list: CellObj[][] = this.props.state.list;
 
         return (
             <div className="container">
                 {
-                    list.map((row, i) => (
-                        <div className="column" key={i}>
-                            {
-                                row.map((col, j) => (
-                                    this.renderCell(i, j)
-                                ))
-                            }
-                        </div>
-                    ))
+                    this.props.state.list.map((row : CellObj[], i: number) => {
+                        return (
+                            <div className="column" key={i}>
+                                {
+                                    row.map((col: CellObj, j: number) => (
+                                        this.renderCell(i, j)
+                                    ))
+                                }
+                            </div>
+                        )
+                    }
+
+                    )
                 }
             </div>
         )

@@ -30,7 +30,6 @@ const initialState: State = {
 }
 
 const reducerCases = (state: State = initialState, action: any): State => {
-    let newState = Object.assign({}, state);
 
     switch (action.type) {
         case 'SET_GAME_PARAMS': {
@@ -51,7 +50,7 @@ const reducerCases = (state: State = initialState, action: any): State => {
             };
         }
         case 'CLICK_CELL_FLAG': {
-            let list:CellObj[][] = {...state.list};
+            let list:CellObj[][] = [...state.list];
             list[action.row][action.call].isFlag = !list[action.row][action.call].isFlag;
 
             return {
@@ -60,9 +59,8 @@ const reducerCases = (state: State = initialState, action: any): State => {
             };
         }
         case 'CLICK_CELL': {
-            debugger
             let statusGame: number = state.statusGame;
-            let list:CellObj[][] = {...state.list};
+            let list:CellObj[][] = [...state.list];
             let flagsAvailableCount: number = state.flagsAvailableCount;
 
             list[action.row][action.call].isOpen = true;
@@ -106,7 +104,7 @@ const reducerCases = (state: State = initialState, action: any): State => {
             };
         }
         case 'FILL_BOARD': {
-            let list = {...state.list};
+            let list: CellObj[][] = [...state.list];
             let bombsList: number[] | null = [];
             let cellClick = Math.round((action.row) * state.height + action.call + 1);
 

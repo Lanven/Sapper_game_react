@@ -1,6 +1,8 @@
+import {ACTIONS} from "./constants";
+
 export const fillBoard = (row: number, call: number) => {
     return {
-        type: "FILL_BOARD",
+        type: ACTIONS.FILL_BOARD,
         row: row,
         call: call
     }
@@ -8,7 +10,7 @@ export const fillBoard = (row: number, call: number) => {
 
 export const clickCellFlag = (row: number, call: number) => {
     return {
-        type: "CLICK_CELL_FLAG",
+        type: ACTIONS.CLICK_CELL_FLAG,
         row: row,
         call: call
     }
@@ -16,14 +18,14 @@ export const clickCellFlag = (row: number, call: number) => {
 
 export const updateFlagsAvailableCount = (flagsAvailableCount: number) => {
     return {
-        type: "UPDATE_FLAGS_AVAILABLE_COUNT",
+        type: ACTIONS.UPDATE_FLAGS_AVAILABLE_COUNT,
         value: flagsAvailableCount
     }
 };
 
 export const clickCell = (row: number, call: number) => {
     return {
-        type: "CLICK_CELL",
+        type: ACTIONS.CLICK_CELL,
         row: row,
         call: call
     }
@@ -31,7 +33,7 @@ export const clickCell = (row: number, call: number) => {
 
 export const setGameParams = (height: number, width: number, complexity: number) => {
     return {
-        type: "SET_GAME_PARAMS",
+        type: ACTIONS.SET_GAME_PARAMS,
         height: height,
         width: width,
         complexity: complexity
@@ -40,7 +42,7 @@ export const setGameParams = (height: number, width: number, complexity: number)
 
 export const generateNewBoard = () => {
     return {
-        type: "GENERATE_NEW_BOARD"
+        type: ACTIONS.GENERATE_NEW_BOARD
     }
-}
+};
 

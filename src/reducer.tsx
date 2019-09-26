@@ -2,7 +2,34 @@ import openNearNullCell from './functions/openNearNullCell';
 import checkIsWinner from "./functions/checkIsWinner";
 import getCellValue from "./functions/getCellValue";
 
-const reducerCases = (state: any, action: any) => {
+interface CellObj {
+    value: number | null;
+    isOpen: boolean;
+    isFlag: boolean;
+    isLastClick: boolean
+}
+
+interface State {
+    height: number;
+    width: number;
+    complexity: number;
+    flagsAvailableCount: number;
+    statusGame: number;
+    list: CellObj[][];
+    bombsList: number[] | null;
+}
+
+const initialState: State = {
+    height: 0,
+    width: 0,
+    complexity: 0,
+    flagsAvailableCount: 0,
+    statusGame: 0,
+    list: [],
+    bombsList: []
+}
+
+const reducerCases = (state: State = initialState, action: any) => {
     let newState = Object.assign({}, state);
 
     switch (action.type) {
@@ -20,7 +47,7 @@ const reducerCases = (state: any, action: any) => {
         }
         case 'CLICK_CELL': {
             state.list[action.row][action.call].isOpen = true;
-            if (state.bombsList.indexOf(Math.round((action.row) * state.height + action.call + 1)) !== -1) {
+            if (state.bombsList && state.bombsList.indexOf(Math.round((action.row) * state.height + action.call + 1)) !== -1) {
                 alert('BOOM!!!');
                 state.statusGame = 1;
                 state.list[action.row][action.call].isLastClick = true;
@@ -29,19 +56,15 @@ const reducerCases = (state: any, action: any) => {
                 openNearNullCell(state, action.row, action.call);
 
                 checkIsWinner(state, action.row, action.call);
+                if (state.statusGame === 2) {
+                    state.flagsAvailableCount = 0;
+                }
             }
 
-            newState = {...state, list: state.list, statusGame: state.statusGame};
+            newState = {...state, list: state.list, statusGame: state.statusGame, flagsAvailableCount: state.flagsAvailableCount};
             break;
         }
         case 'GENERATE_NEW_BOARD': {
-            interface CellObj {
-                value: number | null;
-                isOpen: boolean;
-                isFlag: boolean;
-                isLastClick: boolean
-            }
-
             const list: CellObj[][] = [];
             for (let i = 0; i < state.height; i++) {
                 list[i] = [];

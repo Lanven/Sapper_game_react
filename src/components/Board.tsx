@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import Cell from "./Cell";
 import {connect} from "react-redux";
 import {bindActionCreators} from 'redux'
-import {fillBoard, clickCellFlag, updateFlagsAvailableCount, clickCell} from "../action_creators";
+import {fillBoard, clickCellFlag, updateFlagsAvailableCount, clickCell} from "../actions/index";
 
 interface Props {
     onContextMenu: string,

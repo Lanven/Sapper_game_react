@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Container, Row, Col, Nav} from 'react-bootstrap'
 import {bindActionCreators} from "redux";
-import {setGameParams, generateNewBoard} from "../action_creators";
+import {setGameParams, generateNewBoard} from "../actions/index";
 
 interface Props {
     setGameParams: any,
